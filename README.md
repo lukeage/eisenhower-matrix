@@ -1,8 +1,10 @@
 # Eisenhower Matrix Task Planner
 
-[Live Demo](https://howermatrix.netlify.app/)
+[howermatrix.netlify.app](https://howermatrix.netlify.app/)
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/5a1c3a39-5119-4bbe-a59e-cf89ebab16ac/deploy-status)](https://app.netlify.com/sites/howermatrix/deploys)
+
+[![GitHub license](https://img.shields.io/github/license/lukeage/eisenhower-matrix)](LICENCE) ![GitHub issues](https://img.shields.io/github/issues/lukeage/eisenhower-matrix)
 
 ## 📋 Overview
 
