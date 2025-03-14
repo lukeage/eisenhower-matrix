@@ -16,6 +16,8 @@
             --shadow: 0 4px 12px rgba(0,0,0,0.1);
             --hover-shadow: 0 8px 16px rgba(0,0,0,0.15);
             --transition: all 0.3s ease;
+            --blue-color: #2196F3;
+            --purple-color: #9C27B0;
         }
 
         
@@ -73,13 +75,78 @@
             border-radius: 3px;
         }
         
+        .main-container {
+            display: flex;
+            max-width: 2000px;
+            margin: 0 auto;
+        }
+        
+        .side-column {
+            width: 700px;
+            margin: 0 20px;
+            transition: var(--transition);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            height: 80vh;
+        }
+
+        .side-column .task-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .side-column.collapsed {
+            width: 50px;
+            min-width: 50px;
+            height: 80vh;
+        }
+        
+        .side-column.collapsed {
+            width: 50px;
+            min-width: 50px;
+        }
+
+        
+        .side-column-header {
+            padding: 15px;
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .side-column.collapsed .side-column-header span {
+            display: none;
+        }
+        
+        .side-column.right .side-column-header {
+            background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+        }
+        
+        .toggle-button {
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+        }
+        
         .container {
             display: grid;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: 1fr 1fr;
             gap: 25px;
             height: 80vh;
-            max-width: 1600px;
+            max-width: 1200px;
             margin: 0 auto;
             width: 100%;
         }
@@ -92,7 +159,7 @@
             flex-direction: column;
             overflow: hidden;
             transition: var(--transition);
-            min-width: 350px;
+            min-width: 300px;
         }
         
         .quadrant:hover {
@@ -161,6 +228,14 @@
             border-left-color: #757575;
         }
         
+        .backlog .task-card {
+            border-left-color: #2196F3;
+        }
+        
+        .done .task-card {
+            border-left-color: #9C27B0;
+        }
+        
         .task-card:hover {
             box-shadow: 0 3px 8px rgba(0,0,0,0.15);
             transform: translateY(-2px);
@@ -218,16 +293,6 @@
             align-items: center;
             z-index: 1000;
             backdrop-filter: blur(5px);
-        }
-        
-        .modal-content {
-            background-color: white;
-            padding: 30px;
-            border-radius: var(--border-radius);
-            width: 90%;
-            max-width: 550px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            animation: modalAppear 0.3s ease;
         }
         
         @keyframes modalAppear {
@@ -343,13 +408,11 @@
             display: grid;
             grid-template-columns: auto 1fr auto;
             gap: 20px;
-            max-width: 1600px;
             margin: 0 auto;
             width: 100%;
         }
 
         .spacer {
-        
             width: 45px; 
             grid-column: 3;
             grid-row: 1;
@@ -388,13 +451,70 @@
             background-color: #d32f2f;
         }
         
+        .side-column.collapsed .side-column-header {
+            height: 150px;
+            position: relative;
+        }
+        
+        .side-column.collapsed .task-list,
+        .side-column.collapsed .add-task {
+            display: none;
+        }
+        
+        .side-column.collapsed .toggle-button {
+            position: absolute;
+            top: 10px;
+            left: 13px;
+            transform: rotate(180deg);
+        }
+        
+        @media (max-width: 1200px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .side-column {
+                width: 100%;
+                margin: 0 0 20px 0;
+            }
+            
+            .side-column.collapsed {
+                width: 100%;
+                height: 50px;
+            }
+            
+            .side-column.collapsed .side-column-header {
+                height: 50px;
+            }
+            
+            .collapsed-title {
+                transform: none;
+                position: static;
+                padding-left: 10px;
+            }
+            
+            .side-column.collapsed .toggle-button {
+                transform: rotate(90deg);
+                position: static;
+            }
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 550px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            animation: modalAppear 0.3s ease;
+        }
+        
         @media (max-width: 900px) {
             body {
                 padding: 15px;
             }
             
             .container {
-                
                 width: 100%;
             }
             
@@ -424,8 +544,7 @@
                 font-size: 24px;
             }
         }
-        
-        /* Custom scrollbar */
+            
         .task-list::-webkit-scrollbar {
             width: 8px;
         }
@@ -443,8 +562,7 @@
         .task-list::-webkit-scrollbar-thumb:hover {
             background: #aaa;
         }
-        
-        /* Empty state styling */
+
         .task-list:empty::before {
             content: 'Keine Aufgaben';
             display: block;
@@ -453,88 +571,112 @@
             padding: 30px 0;
             font-style: italic;
         }
-    </style>
-</head>
-<body>
-    <a href="javascript:history.back()" class="back-button">
-        &#8249;
-    </a>
-    <h1><a href="https://de.wikipedia.org/wiki/Eisenhower-Prinzip" target="_blank" style="color: inherit; text-decoration: none;">Eisenhower-Prinzip</a></h1>
-    
-    <div class="matrix-container">
-        <div class="y-axis">IMPORTANCE</div>
+        </style>
+    </head>
+    <body>
+        <a href="javascript:history.back()" class="back-button">
+            &#8249;
+        </a>
+        <h1><a href="https://de.wikipedia.org/wiki/Eisenhower-Prinzip" target="_blank" style="color: inherit; text-decoration: none;">Task-List</a></h1>
         
-        <div>
-            <div class="container">
-                <div class="quadrant q1" id="quadrant1">
-                    <div class="quadrant-header">
-                        <span>plan</span>
-                    </div>
-                    <div class="task-list" id="list1"></div>
-                    <button class="add-task" data-quadrant="1">Task</button>
+        <div class="main-container">
+            <!-- Backlog Column (Left) -->
+            <div class="side-column left" id="backlogColumn">
+                <div class="side-column-header">
+                    <span>backlog</span>
+                    <button class="toggle-button" id="toggleBacklog">◀</button>
                 </div>
-                
-                <div class="quadrant q2" id="quadrant2">
-                    <div class="quadrant-header">
-                        <span>to do</span>
-                    </div>
-                    <div class="task-list" id="list2"></div>
-                    <button class="add-task" data-quadrant="2">Task</button>
-                </div>
-                
-                <div class="quadrant q3" id="quadrant3">
-                    <div class="quadrant-header">
-                        <span>delete</span>
-                    </div>
-                    <div class="task-list" id="list3"></div>
-                    <button class="add-task" data-quadrant="3">Task</button>
-                </div>
-                
-                <div class="quadrant q4" id="quadrant4">
-                    <div class="quadrant-header">
-                        <span>delegate</span>
-                    </div>
-                    <div class="task-list" id="list4"></div>
-                    <button class="add-task" data-quadrant="4">Task</button>
-                </div>
+                <div class="task-list backlog" id="listBacklog"></div>
+                <button class="add-task" data-quadrant="backlog">Task</button>
             </div>
             
-            <div class="x-axis">URGENCY</div>
+            <div class="matrix-container">
+                <div class="y-axis">IMPORTANCE</div>
+                
+                <div>
+                    <div class="container">
+                        <div class="quadrant q1" id="quadrant1">
+                            <div class="quadrant-header">
+                                <span>plan</span>
+                            </div>
+                            <div class="task-list" id="list1"></div>
+                            <button class="add-task" data-quadrant="1">Task</button>
+                        </div>
+                        
+                        <div class="quadrant q2" id="quadrant2">
+                            <div class="quadrant-header">
+                                <span>to do</span>
+                            </div>
+                            <div class="task-list" id="list2"></div>
+                            <button class="add-task" data-quadrant="2">Task</button>
+                        </div>
+                        
+                        <div class="quadrant q3" id="quadrant3">
+                            <div class="quadrant-header">
+                                <span>delete</span>
+                            </div>
+                            <div class="task-list" id="list3"></div>
+                            <button class="add-task" data-quadrant="3">Task</button>
+                        </div>
+                        
+                        <div class="quadrant q4" id="quadrant4">
+                            <div class="quadrant-header">
+                                <span>delegate</span>
+                            </div>
+                            <div class="task-list" id="list4"></div>
+                            <button class="add-task" data-quadrant="4">Task</button>
+                        </div>
+                    </div>
+                    
+                    <div class="x-axis">URGENCY</div>
+                </div>
+                <div class="spacer"></div>
+            </div>
+            
+            <!-- Done Column (Right) -->
+            <div class="side-column right" id="doneColumn">
+                <div class="side-column-header">
+                    <span>done</span>
+                    <button class="toggle-button" id="toggleDone">▶</button>
+                </div>
+                <div class="task-list done" id="listDone"></div>
+                <button class="add-task" data-quadrant="done">Task</button>
+            </div>
         </div>
-        <div class="spacer"></div>
-    </div>
-    
-    <div class="modal" id="taskModal">
-        <div class="modal-content">
-            <h2 id="modalTitle">New Task</h2>
-            
-            <div class="form-group">
-                <label for="taskSubject">Title:</label>
-                <input type="text" id="taskSubject" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="taskDescription">Description:</label>
-                <textarea id="taskDescription" rows="4"></textarea>
-            </div>
-            
-            <input type="hidden" id="taskQuadrant" value="1">
-            <input type="hidden" id="taskId" value="">
-            
-            <div class="button-group">
-                <button class="cancel-button" id="cancelButton">Cancel</button>
-                <button class="save-button" id="saveButton">Save</button>
+        
+        <div class="modal" id="taskModal">
+            <div class="modal-content">
+                <h2 id="modalTitle">New Task</h2>
+                
+                <div class="form-group">
+                    <label for="taskSubject">Title:</label>
+                    <input type="text" id="taskSubject" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="taskDescription">Description:</label>
+                    <textarea id="taskDescription" rows="4"></textarea>
+                </div>
+                
+                <input type="hidden" id="taskQuadrant" value="1">
+                <input type="hidden" id="taskId" value="">
+                
+                <div class="button-group">
+                    <button class="cancel-button" id="cancelButton">Cancel</button>
+                    <button class="save-button" id="saveButton">Save</button>
+                </div>
             </div>
         </div>
-    </div>
-    
+        
     <script>
         // Store tasks in local storage
         let tasks = JSON.parse(localStorage.getItem('eisenhowerTasks')) || {
             list1: [],
             list2: [],
             list3: [],
-            list4: []
+            list4: [],
+            listBacklog: [],
+            listDone: []
         };
         
         // DOM elements
@@ -548,16 +690,30 @@
         const modalTitle = document.getElementById('modalTitle');
         const addTaskButtons = document.querySelectorAll('.add-task');
         const taskLists = document.querySelectorAll('.task-list');
+        const backlogColumn = document.getElementById('backlogColumn');
+        const doneColumn = document.getElementById('doneColumn');
+        const toggleBacklog = document.getElementById('toggleBacklog');
+        const toggleDone = document.getElementById('toggleDone');
+        
+        toggleBacklog.addEventListener('click', () => {
+            backlogColumn.classList.toggle('collapsed');
+        });
+        
+        toggleDone.addEventListener('click', () => {
+            doneColumn.classList.toggle('collapsed');
+        });
         
         // Initialize the task lists
         function renderTasks() {
             Object.keys(tasks).forEach(listId => {
                 const listElement = document.getElementById(listId);
-                listElement.innerHTML = '';
-                tasks[listId].forEach(task => {
-                    const taskElement = createTaskElement(task);
-                    listElement.appendChild(taskElement);
-                });
+                if (listElement) {
+                    listElement.innerHTML = '';
+                    tasks[listId].forEach(task => {
+                        const taskElement = createTaskElement(task);
+                        listElement.appendChild(taskElement);
+                    });
+                }
             });
         }
         
@@ -638,7 +794,11 @@
                 description: description
             };
             
-            tasks[`list${quadrant}`].push(newTask);
+            const listId = quadrant === 'backlog' ? 'listBacklog' : 
+                            quadrant === 'done' ? 'listDone' :
+                            `list${quadrant}`;
+                            
+            tasks[listId].push(newTask);
             saveTasks();
         }
         
@@ -661,7 +821,6 @@
         }
 
         function deleteTask(taskId) {
-            
             let found = false;
             
             Object.keys(tasks).forEach(listId => {
@@ -690,7 +849,6 @@
             if (!found) {
                 console.error("Task not found:", taskId);
             }
-            
         }
         
         // Open modal for new task
@@ -724,9 +882,6 @@
                 openNewTaskModal(quadrant);
             });
         });
-
-        // Add visual cues for drag targets
-
         
         cancelButton.addEventListener('click', closeModal);
         
@@ -765,7 +920,6 @@
         }
         
         taskLists.forEach(list => {
-            
             list.addEventListener('dragenter', () => {
                 list.classList.add('drag-over');
             });
@@ -778,10 +932,6 @@
             list.addEventListener('dragover', e => {
                 e.preventDefault();
                 const afterElement = getDragAfterElement(list, e.clientY);
-                const draggingElement = document.querySelector('.dragging');
-                
-                // Only show a visual indicator of where the element would be placed
-                // but don't actually move it in the DOM until drop
             });
             
             // Handle drop
@@ -792,32 +942,28 @@
                 const sourceListId = draggedTask.parentElement.id;
                 const targetListId = list.id;
                 
-                try {
-                    // Find the task object
-                    const taskIndex = tasks[sourceListId].findIndex(task => task.id === taskId);
-                    if (taskIndex !== -1) {
-                        const task = tasks[sourceListId][taskIndex];
-                        
-                        // Remove from source
-                        tasks[sourceListId].splice(taskIndex, 1);
-                        
-                        // Get position to insert at based on cursor position
-                        const afterElement = getDragAfterElement(list, e.clientY);
-                        
-                        if (afterElement == null) {
-                            // Add to the end if no afterElement
-                            tasks[targetListId].push(task);
-                        } else {
-                            // Insert at the right position
-                            const afterElementId = afterElement.getAttribute('data-id');
-                            const insertIndex = tasks[targetListId].findIndex(t => t.id === afterElementId);
-                            tasks[targetListId].splice(insertIndex, 0, task);
-                        }
-                        
-                        saveTasks();
+                
+                const taskIndex = tasks[sourceListId].findIndex(task => task.id === taskId);
+                if (taskIndex !== -1) {
+                    const task = tasks[sourceListId][taskIndex];
+                    
+                    // Remove from source
+                    tasks[sourceListId].splice(taskIndex, 1);
+                    
+                    // Get position to insert at based on cursor position
+                    const afterElement = getDragAfterElement(list, e.clientY);
+                    
+                    if (afterElement == null) {
+                        // Add to the end if no afterElement
+                        tasks[targetListId].push(task);
+                    } else {
+                        // Insert at the right position
+                        const afterElementId = afterElement.getAttribute('data-id');
+                        const insertIndex = tasks[targetListId].findIndex(t => t.id === afterElementId);
+                        tasks[targetListId].splice(insertIndex, 0, task);
                     }
-                } catch (error) {
-                    console.error("Error during drag and drop:", error);
+                    
+                    saveTasks();
                 }
             });
         });
@@ -869,6 +1015,32 @@
                     closeModal();
                 }
             });
+            
+            // Check if there's any saved state for column collapse
+            const savedState = JSON.parse(localStorage.getItem('eisenhowerColumns')) || {};
+            
+            if (savedState.backlogCollapsed) {
+                backlogColumn.classList.add('collapsed');
+                const title = document.createElement('div');
+            }
+            
+            if (savedState.doneCollapsed) {
+                doneColumn.classList.add('collapsed');
+                const title = document.createElement('div');
+            }
+            
+            // Save column state when toggling
+            toggleBacklog.addEventListener('click', saveColumnState);
+            toggleDone.addEventListener('click', saveColumnState);
+        }
+        
+        // Save column collapse state
+        function saveColumnState() {
+            const state = {
+                backlogCollapsed: backlogColumn.classList.contains('collapsed'),
+                doneCollapsed: doneColumn.classList.contains('collapsed')
+            };
+            localStorage.setItem('eisenhowerColumns', JSON.stringify(state));
         }
         
         // Start the app
