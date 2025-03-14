@@ -498,7 +498,7 @@
                 position: static;
             }
         }
-        
+
         .modal-content {
             background-color: white;
             padding: 30px;
@@ -853,7 +853,7 @@
         
         // Open modal for new task
         function openNewTaskModal(quadrant) {
-            modalTitle.textContent = 'Neue Aufgabe';
+            modalTitle.textContent = 'New Task';
             taskSubject.value = '';
             taskDescription.value = '';
             taskQuadrant.value = quadrant;
@@ -863,7 +863,7 @@
         
         // Open modal for editing task
         function openEditTaskModal(task) {
-            modalTitle.textContent = 'Aufgabe bearbeiten';
+            modalTitle.textContent = 'Edit Task';
             taskSubject.value = task.subject;
             taskDescription.value = task.description;
             taskId.value = task.id;
@@ -890,7 +890,7 @@
             const description = taskDescription.value.trim();
             
             if (!subject) {
-                alert('Bitte geben Sie einen Betreff ein.');
+                alert('Please enter a title.');
                 return;
             }
             
@@ -974,7 +974,7 @@
                 renderTasks();
             } catch (error) {
                 console.error("Error saving tasks:", error);
-                alert("Fehler beim Speichern der Aufgaben. Bitte versuchen Sie es erneut.");
+                alert("Error while saving. Please try again.");
             }
         }
         
