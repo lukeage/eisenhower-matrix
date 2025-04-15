@@ -280,6 +280,39 @@
             border-left: 4px solid transparent;
             color: var(--task-card-text);
         }
+
+        .task-card a {
+            color: #2196F3;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            padding: 0 2px;
+        }
+        
+        .task-card a:hover {
+            border-bottom-color: #2196F3;
+            background-color: rgba(33, 150, 243, 0.1);
+            border-radius: 2px;
+        }
+        
+        /* Dark mode specific link styling */
+        [data-theme="dark"] .task-card a {
+            color: #64B5F6;  /* Lighter blue for dark mode */
+        }
+        
+        [data-theme="dark"] .task-card a:hover {
+            border-bottom-color: #64B5F6;
+            background-color: rgba(100, 181, 246, 0.15);
+        }
+        
+        /* Visual indication that it's a link */
+        .task-card a::after {
+            content: "↗";
+            font-size: 0.8em;
+            margin-left: 2px;
+            opacity: 0.7;
+        }
         
         .q1 .task-card {
             border-left-color: #546e7a;
@@ -797,6 +830,20 @@
             });
         }
         
+        function linkify(text) {
+            // Regex to find URLs (http, https, ftp, www)
+            const urlRegex = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])|(\bwww\.[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+            return text.replace(urlRegex, function(url, urlWithProto, proto, urlWww) {
+                let fullUrl = url;
+                // Prepend http:// if url starts with www.
+                if (urlWww) {
+                    fullUrl = 'http://' + url;
+                }
+                // Use rel="noopener noreferrer" for security with target="_blank"
+                return `<a href="${fullUrl}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+            });
+        }
+
         // Create task element
         // Add visual feedback when creating tasks
         function createTaskElement(task) {
@@ -810,10 +857,12 @@
             taskElement.style.transform = 'translateY(10px)';
             
             const title = document.createElement('h3');
-            title.textContent = task.subject;
+
+            title.innerHTML = linkify(task.subject || '');
+            
             
             const desc = document.createElement('p');
-            desc.textContent = task.description;
+            desc.innerHTML = linkify(task.description || '');
             
             // Create delete button
             const deleteButton = document.createElement('button');
@@ -1121,6 +1170,39 @@
             doneCollapsed: doneColumn.classList.contains('collapsed')
         };
         localStorage.setItem('eisenhowerColumns', JSON.stringify(state));
+    }
+
+    taskSubject.addEventListener('keydown', handleEnterKey);
+    taskDescription.addEventListener('keydown', handleEnterKey);
+
+    function handleEnterKey(e) {
+        if (e.key === 'Enter') {
+            // If Shift+Enter, allow normal behavior (new line)
+            if (e.shiftKey) {
+                return;
+            }
+            
+            // If just Enter, prevent default and save the task
+            e.preventDefault();
+            
+            const subject = taskSubject.value.trim();
+            const description = taskDescription.value.trim();
+            
+            if (!subject) {
+                alert('Please enter a title.');
+                return;
+            }
+            
+            if (taskId.value) {
+                // Update existing task
+                updateTask(taskId.value, subject, description);
+            } else {
+                // Add new task
+                addTask(taskQuadrant.value, subject, description);
+            }
+            
+            closeModal();
+        }
     }
     
     // Start the app
